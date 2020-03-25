@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 
+
 class Category(models.Model):
     name = models.CharField(max_length=20)
 
@@ -11,7 +12,6 @@ class Category(models.Model):
         ordering = ['name']
 
 
-
 class Book(models.Model):
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
@@ -20,14 +20,31 @@ class Book(models.Model):
     avail_stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return '('+str(self.Category)+') ' + str(self.name)
+        return '(' + str(self.Category) + ') ' + str(self.name)
 
 
 class IssuedBook(models.Model):
-    book = models.ForeignKey(Book,on_delete=models.CASCADE)
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     issued_date = models.DateField()
     return_date = models.DateField()
+    status = models.CharField(max_length=10, default='booked')
 
     def __str__(self):
-        return str(self.user.name)+'-'+str(self.book.name)
+        return str(self.user.name) + '-' + str(self.book.name) + '-' + str(self.status)
+
+
+class WaitingTable(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User)
+
+
+class LibrarianTemp(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    issued_date = models.DateField()
+    return_date = models.DateField()
+    status = models.CharField(max_length=10, default='booked')
+
+    def __str__(self):
+        return str(self.user.name) + '-' + str(self.book.name) + '-' + str(self.status)

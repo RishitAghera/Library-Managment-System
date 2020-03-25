@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Category)
 admin.site.register(Book)
 admin.site.register(IssuedBook)
+admin.site.register(LibrarianTemp)

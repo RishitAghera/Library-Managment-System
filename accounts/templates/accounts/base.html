@@ -40,6 +40,15 @@
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Issue Book
                 </a>
             </li>
+                {% if user.is_staff %}
+                    <li class="{% if request.resolver_match.url_name == 'book' %}active{%endif%}">
+                    <a href="#">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Check requests
+                    </a>
+                    </li>
+
+                {% endif %}
+
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

@@ -1,5 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
+
+from book.models import LibrarianTemp
 from .forms import *
 from django.views import View
 from django.contrib.messages.views import messages
@@ -23,6 +25,11 @@ class Login(View):
             password = form.cleaned_data.get('password')
             user = authenticate(email=email, password=password)
             if user is not None:
+                if user.is_staff:
+                    login(request, user)
+                    print('staff login')
+                    pending_req=LibrarianTemp.objects.all()
+                    return redirect('accounts:index',{'pending_req':pending_req})
                 login(request, user)
                 print('login successfull')
                 return redirect('book:booksearch')
@@ -50,5 +57,5 @@ class Registration(View):
         else:
             messages.error(request, 'Registration fail..')
             return render(request, 'accounts/registrations.html', {'form': form})
-
+        messages.info(request, 'Registration successfully..')
         return redirect('accounts:login')
