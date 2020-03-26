@@ -3,12 +3,12 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User
 
-GENDER_CHOICE=(('M','Male'),
-               ('F','Female'))
+# GENDER_CHOICE=(('M','Male'),
+#                ('F','Female'))
 
 
 class RegistrationForm(UserCreationForm):
-    gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICE))
+    # gender = forms.CharField(widget=forms.Select(choices=GENDER_CHOICE))
 
     class Meta:
         model = User

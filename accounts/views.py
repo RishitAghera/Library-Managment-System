@@ -1,14 +1,15 @@
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
 
-from book.models import LibrarianTemp
+from book.models import IssuedBook
+from lms import settings
 from .forms import *
 from django.views import View
 from django.contrib.messages.views import messages
 
 
 def index(request):
-    return render(request, 'accounts/base.html')
+    return render(request, 'accounts/index.html')
 
 
 class Login(View):
@@ -20,29 +21,24 @@ class Login(View):
     def post(self, request):
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            print('isvalid')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
             user = authenticate(email=email, password=password)
             if user is not None:
                 if user.is_staff:
                     login(request, user)
-                    print('staff login')
-                    pending_req=LibrarianTemp.objects.all()
-                    return redirect('accounts:index',{'pending_req':pending_req})
+                    return redirect('book:approval')
                 login(request, user)
-                print('login successfull')
                 return redirect('book:booksearch')
             else:
                 messages.error(request, 'User Not Found please Enter Valid data' + str(form.errors))
         return render(request, 'accounts/login.html', {'form': form})
 
 
-class Logout(View):
-    def get(self, request):
-        logout(request)
-        print('logged out')
-        return redirect("accounts:index")
+def Logout(request):
+    logout(request)
+    return redirect(settings.LOGOUT_REDIRECT_URL)
+
 
 class Registration(View):
 

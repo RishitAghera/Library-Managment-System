@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'ajax_calls/search/$', views.autocompleteModel),
     path('',views.BookSearch.as_view(),name='booksearch'),
     path('issued/',views.MyIssuedBook.as_view(),name='myissuedbook'),
-
+    path('issued/approval/',views.ApproveReq.as_view(),name='approval'),
+    path('issued/return/',views.ReturnBook.as_view(),name='bookreturn'),
 ]

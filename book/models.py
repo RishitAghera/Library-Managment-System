@@ -13,14 +13,14 @@ class Category(models.Model):
 
 
 class Book(models.Model):
-    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     information = models.CharField(max_length=200)
     total_stock = models.PositiveIntegerField(default=0)
     avail_stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return '(' + str(self.Category) + ') ' + str(self.name)
+        return '(' + str(self.category) + ') ' + str(self.name)
 
 
 class IssuedBook(models.Model):
@@ -28,10 +28,11 @@ class IssuedBook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     issued_date = models.DateField()
     return_date = models.DateField()
-    status = models.CharField(max_length=10, default='booked')
+    status = models.CharField(max_length=10, default='pending')
 
     def __str__(self):
-        return str(self.user.name) + '-' + str(self.book.name) + '-' + str(self.status)
+        return str(self.id)+ ' ' + str(self.user.name) + '-' + str(self.book.name) + '(' + str(self.book.category.name) + ')-' + str(
+            self.status)
 
 
 class WaitingTable(models.Model):
@@ -39,12 +40,10 @@ class WaitingTable(models.Model):
     users = models.ManyToManyField(User)
 
 
-class LibrarianTemp(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    issued_date = models.DateField()
-    return_date = models.DateField()
-    status = models.CharField(max_length=10, default='booked')
+class WaitingQueue(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    waiting = models.ForeignKey(WaitingTable, on_delete=models.CASCADE)
+    request_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.user.name) + '-' + str(self.book.name) + '-' + str(self.status)
+        return str(self.user.name) + str(self.request_time)

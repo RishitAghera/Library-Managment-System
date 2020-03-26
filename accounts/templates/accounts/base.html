@@ -33,8 +33,6 @@
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
 
-
-
                 <li class="{% if request.resolver_match.url_name == 'book' %}active{%endif%}">
                 <a href="#">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Issue Book
@@ -55,7 +53,7 @@
 
 
                     <li class="{% if request.resolver_match.url_name == 'mybookinglist' %}active{%endif%}">
-                    <a href="#">
+                    <a href="{% url 'book:myissuedbook' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; My Books
                     </a>
                 </li>
