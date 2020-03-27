@@ -37,13 +37,13 @@ class IssuedBook(models.Model):
 
 class WaitingTable(models.Model):
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User,through='WaitingQueue')
 
 
 class WaitingQueue(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    users = models.ForeignKey(User, on_delete=models.CASCADE)
     waiting = models.ForeignKey(WaitingTable, on_delete=models.CASCADE)
     request_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.user.name) + str(self.request_time)
+        return str(self.users.name) + ' (' + str(self.waiting.book.name)+ ') '+ str(self.request_time)

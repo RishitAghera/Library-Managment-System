@@ -32,15 +32,16 @@
         </div>
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
-
-                <li class="{% if request.resolver_match.url_name == 'book' %}active{%endif%}">
-                <a href="#">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Issue Book
-                </a>
-            </li>
+                {% if user.is_authenticated %}
+                    <li class="{% if request.resolver_match.url_name == 'booksearch' %}active{%endif%}">
+                    <a href="{% url 'book:booksearch' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Issue Book
+                    </a>
+                    </li>
+                {% endif %}
                 {% if user.is_staff %}
-                    <li class="{% if request.resolver_match.url_name == 'book' %}active{%endif%}">
-                    <a href="#">
+                    <li class="{% if request.resolver_match.url_name == 'approval' %}active{%endif%}">
+                    <a href="{% url 'book:approval' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Check requests
                     </a>
                     </li>
@@ -52,21 +53,22 @@
             <ul class="nav navbar-nav navbar-right">
 
 
-                    <li class="{% if request.resolver_match.url_name == 'mybookinglist' %}active{%endif%}">
-                    <a href="{% url 'book:myissuedbook' %}">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; My Books
-                    </a>
-                </li>
+
 
 <!--            <ul class="nav navbar-nav navbar-right">-->
 
                 {% if user.is_authenticated %}
-                <li class="">
+                <li class="{% if request.resolver_match.url_name == 'myissuedbook' %}active{%endif%}">
+                    <a href="{% url 'book:myissuedbook' %}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; My Books
+                    </a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'logout' %}active{%endif%}">
                 <a href="{% url 'accounts:logout' %}" id="logout">
                     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Log out
                 </a>
             </li>
-                <li class="{% if request.resolver_match.url_name == 'profile' %}active{%endif%}">
+                <li class="active">
                     <a href="#"><span aria-hidden="true"></span><b>{{user.name}}</b></a>
                 </li>
                 {% else %}
